@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    airflow:
+        restart: "always"
+        build:
+            context: .
+            dockerfile: services/airflow/Dockerfile
+        ports:
+            - 8080:8080
+        env_file: 
+            - config/airflow.env
+            - config/gcp.env
+        volumes: 
+            - ./src/dags/:/usr/local/airflow/dags
+        command: webserver
