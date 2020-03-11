@@ -46,7 +46,23 @@ services:
             dockerfile: services/superset/Dockerfile
         ports:
             - 8088:8088
-        depends_on:
-            - postgres
         env_file:
             - ./config/superset.env
+
+    postgres:
+        restart: "always"
+        build:
+            context: .
+            dockerfile: services/postgres/Dockerfile
+        env_file:
+            - ./config/postgres.env
+        volumes:
+            - postgres_volume:/var/lib/postgresql/data/
+            - ./services/postgres/:/docker-entrypoint-initdb.d/
+        ports:
+            - 5432:5432
+
+
+volumes:
+    portainer_volume:
+    postgres_volume:
