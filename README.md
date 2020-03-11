@@ -1,1 +1,1 @@
-# CoronaViz
+# Coronalytics
