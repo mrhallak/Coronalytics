@@ -26,6 +26,8 @@ services:
             - ./src/:/home/jovyan/work/
         env_file:
             - config/gcp.env
+            - config/jupyter.env
+        entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
     portainer:
         restart: "always"
