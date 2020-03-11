@@ -3,9 +3,6 @@ version: '3'
 services:
     airflow:
         restart: "always"
-        build:
-            context: .
-            dockerfile: services/airflow/Dockerfile
         ports:
             - 8080:8080
         env_file: 
@@ -14,3 +11,39 @@ services:
         volumes: 
             - ./src/dags/:/usr/local/airflow/dags
         command: webserver
+
+    jupyter:
+        restart: "always"
+        build:
+            context: .
+            dockerfile: services/jupyter/Dockerfile
+        ports:
+            - 8888:8888
+        volumes:
+            - ./src/:/home/jovyan/work/
+        env_file:
+            - config/gcp.env
+
+    portainer:
+        restart: "always"
+        build:
+            context: .
+            dockerfile: services/portainer/Dockerfile
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer_volume:/data
+        ports:
+            - 9090:9000
+        command: -H unix:///var/run/docker.sock
+
+    superset:
+        restart: "always"
+        build:
+            context: .
+            dockerfile: services/superset/Dockerfile
+        ports:
+            - 8088:8088
+        depends_on:
+            - postgres
+        env_file:
+            - ./config/superset.env
