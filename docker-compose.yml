@@ -12,7 +12,7 @@ services:
             - config/airflow.env
             - config/gcp.env
         volumes: 
-            - ./src/dags/:/usr/local/airflow/dags
+            - ./src/:/usr/local/airflow/dags
         command: webserver
 
     jupyter:
@@ -25,8 +25,8 @@ services:
         volumes:
             - ./src/:/home/jovyan/work/
         env_file:
-            - config/gcp.env
             - config/jupyter.env
+            - config/gcp.env
         entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
     portainer:
