@@ -6,8 +6,7 @@ class JhuFetcher:
     @staticmethod
     def fetch(chunk_size=8192):
         try:
-            # current_date = datetime.today().strftime('%m-%d-%Y')
-            current_date = '03-14-2020'
+            current_date = datetime.today().strftime('%m-%d-%Y')
             logging.info(f"Fetching data from Johns Hopkins University - Daily Reports ({current_date})")
 
             url = f'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{current_date}.csv'
@@ -26,5 +25,3 @@ class JhuFetcher:
         
         except Exception as e:
             logging.error(e)
-
-JhuFetcher.fetch()
