@@ -16,3 +16,12 @@ class Storage:
         blob.upload_from_filename(source_file_uri)
 
         logging.info(f"Uploaded {source_file_uri} to gs://{bucket_name}/{destination_file_uri}")
+
+    def delete_blob(self, file_uri: str, bucket_name: str):
+        logging.info(f"Deleting gs://{bucket_name}/{file_uri}")
+        
+        bucket = self.client.bucket(bucket_name)
+        blob = bucket.blob(file_uri)
+        blob.delete()
+
+        logging.info(f"Deleted gs://{bucket_name}/{file_uri}")
