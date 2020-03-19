@@ -18,7 +18,6 @@ class Postgres:
                 password=password
             )
 
-            
             self.connection.autocommit = True
 
         except OperationalError as e:
