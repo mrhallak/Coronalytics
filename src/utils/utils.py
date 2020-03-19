@@ -1,10 +1,10 @@
-from io import StringIO
-from csv import DictReader
+from io import StringIO, TextIOBase
+from csv import DictReader, QUOTE_ALL
 from typing import Optional, Any, Iterator
 
 
 # https://stackoverflow.com/a/12604375/2000875
-class StringIteratorIO(io.TextIOBase):
+class StringIteratorIO(TextIOBase):
     def __init__(self, iter: Iterator[str]):
         self._iter = iter
         self._buff = ''
@@ -47,12 +47,15 @@ class StringIteratorIO(io.TextIOBase):
         return ''.join(line)
 
 
-def file_to_iterable(file_path: str, fields: tuple) -> StringIO:
-    data = DictReader(open(file_path), fieldnames=fields)
+def file_to_iterable(file_path: str, fields: tuple, delimiter: str = ',') -> StringIO:
+    data = DictReader(open(file_path), fieldnames=fields, delimiter=delimiter, quoting=QUOTE_ALL)
+
+    # Skip header row
+    next(data)
 
     file_iterator = StringIteratorIO(
         (
-            '|'.join(
+            delimiter.join(
                 map(
                     clean_csv_value, (
                         row['province'],
@@ -76,4 +79,4 @@ def clean_csv_value(value: Optional[Any]) -> str:
     if value is None:
         return r'\N'
 
-    return str(value).replace('\n', '\\n')
+    return str(value).replace('\n', '\\n').replace(',', '')

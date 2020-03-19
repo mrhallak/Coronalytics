@@ -11,6 +11,7 @@ services:
         env_file: 
             - config/airflow.env
             - config/gcp.env
+            - config/postgres.env
         volumes: 
             - ./src/:/usr/local/airflow/dags
         command: webserver
@@ -49,7 +50,7 @@ services:
         ports:
             - 8088:8088
         env_file:
-            - ./config/superset.env
+            - config/superset.env
 
     postgres:
         restart: "always"
@@ -57,7 +58,7 @@ services:
             context: .
             dockerfile: services/postgres/Dockerfile
         env_file:
-            - ./config/postgres.env
+            - config/postgres.env
         volumes:
             - postgres_volume:/var/lib/postgresql/data/
             - ./services/postgres/:/docker-entrypoint-initdb.d/

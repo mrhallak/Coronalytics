@@ -32,7 +32,7 @@ dag = DAG(
     schedule_interval=datetime.timedelta(days=1),
 )
 
-gcp_storage = Storage(project_id=os.environ['GCP_PROJECT_ID'])
+# gcp_storage = Storage(project_id=os.environ['GCP_PROJECT_ID'])
 
 fetch_data = PythonOperator(
     task_id='fetch_data',
@@ -42,14 +42,10 @@ fetch_data = PythonOperator(
     dag=dag
 )
 
-upload_data_to_gcs = PythonOperator(
-    task_id='upload_data_to_gcs',
-    python_callable=gcp_storage.upload_blob,
-    op_kwargs={
-        'source_file_uri': "/tmp/{{ ds }}.csv",
-        'destination_file_uri': 'data/{{ ds }}.csv',
-        'bucket_name': os.environ['GCP_STORAGE_BUCKET']
-    },
+load_data_in_pg = PythonOperator(
+    task_id='load_data',
+    python_callable=JhuFetcher.load_to_pg,
+    op_kwargs={'current_execution_date': "{{ ds }}"},
     dag=dag
 )
 
@@ -59,19 +55,21 @@ delete_local_file = BashOperator(
     dag=dag,
 )
 
-fetch_data >> upload_data_to_gcs >> delete_local_file
+create_dataproc_cluster = DataprocClusterCreateOperator(
+    task_id='create_dataproc_cluster',
+    dag=dag,
+    cluster_name=os.environ['GCP_CLUSTER_NAME'],
+    region=os.environ['GCP_CLUSTER_REGION'],
+    project_id=os.environ['GCP_PROJECT_ID'],
+    master_machine_type='n1-standard-1',
+    worker_machine_type='n1-standard-1',
+    num_workers=2,
+    storage_bucket=os.environ['GCP_STORAGE_BUCKET']
+)
 
-# create_dataproc_cluster = DataprocClusterCreateOperator(
-#     task_id='create_dataproc_cluster',
-#     dag=dag,
-#     cluster_name=os.environ['GCP_CLUSTER_NAME'],
-#     region=os.environ['GCP_CLUSTER_REGION'],
-#     project_id=os.environ['GCP_PROJECT_ID'],
-#     master_machine_type='n1-standard-1',
-#     worker_machine_type='n1-standard-1',
-#     num_workers=2,
-#     storage_bucket=os.environ['GCP_STORAGE_BUCKET']
-# )
+fetch_data >> [load_data_in_pg]
+load_data_in_pg >> [delete_local_file]
+
 
 # submit_job = DataProcPySparkOperator(
 #     task_id='count_items',

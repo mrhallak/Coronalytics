@@ -1,2 +1,2 @@
 apache-airflow[gcp]==1.10.9
-psycopg2==2.8.4
+psycopg2-binary==2.8.4
