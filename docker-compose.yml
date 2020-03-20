@@ -11,8 +11,9 @@ services:
         env_file: 
             - config/airflow.env
             - config/gcp.env
+            - config/postgres.env
         volumes: 
-            - ./src/dags/:/usr/local/airflow/dags
+            - ./src/:/usr/local/airflow/dags
         command: webserver
 
     jupyter:
@@ -25,8 +26,8 @@ services:
         volumes:
             - ./src/:/home/jovyan/work/
         env_file:
-            - config/gcp.env
             - config/jupyter.env
+            - config/gcp.env
         entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
     portainer:
@@ -41,15 +42,13 @@ services:
             - 9090:9000
         command: -H unix:///var/run/docker.sock
 
-    superset:
+    grafana:
         restart: "always"
         build:
             context: .
-            dockerfile: services/superset/Dockerfile
+            dockerfile: services/grafana/Dockerfile
         ports:
-            - 8088:8088
-        env_file:
-            - ./config/superset.env
+            - 3000:3000
 
     postgres:
         restart: "always"
@@ -57,7 +56,7 @@ services:
             context: .
             dockerfile: services/postgres/Dockerfile
         env_file:
-            - ./config/postgres.env
+            - config/postgres.env
         volumes:
             - postgres_volume:/var/lib/postgresql/data/
             - ./services/postgres/:/docker-entrypoint-initdb.d/
