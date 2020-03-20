@@ -42,15 +42,13 @@ services:
             - 9090:9000
         command: -H unix:///var/run/docker.sock
 
-    superset:
+    grafana:
         restart: "always"
         build:
             context: .
-            dockerfile: services/superset/Dockerfile
+            dockerfile: services/grafana/Dockerfile
         ports:
-            - 8088:8088
-        env_file:
-            - config/superset.env
+            - 3000:3000
 
     postgres:
         restart: "always"
