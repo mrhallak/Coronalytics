@@ -5,8 +5,9 @@ This file contains a description of all of the services used in this project.
 ### Postgres
 Postgres is a SQL database that we will use to store our transformed data.
 
-### Superset
-Superset is a visualization tool that we will use to visualize the data loaded into Postgres.
+### Grafana
+Grafana is a visualization tool that we will use to visualize the data loaded into Postgres.
+
 ### Jupyter
 
 ### Apache Airflow
@@ -25,6 +26,6 @@ Portainer allows you to build and manage your docker containers.
 | Jupyter | 8888 |
 | Portainer | 9090 |
 | Postgres | 5432 |
-| Superset | 8088 |
+| Grafana | 3000 |
 
 [1]: https://cloud.google.com/composer/docs/how-to/managing/connections#creating_new_airflow_connections

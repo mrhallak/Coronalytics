@@ -1,5 +1,7 @@
 from io import StringIO, TextIOBase
 from csv import DictReader, QUOTE_ALL
+from dateutil import parser
+from datetime import datetime
 from typing import Optional, Any, Iterator
 
 
@@ -47,11 +49,14 @@ class StringIteratorIO(TextIOBase):
         return ''.join(line)
 
 
-def file_to_iterable(file_path: str, fields: tuple, delimiter: str = ',') -> StringIO:
+def file_to_iterable(file_path: str, fields: tuple, current_execution_date: str, delimiter: str = ',') -> StringIO:
+    current_execution_date = datetime.strptime(current_execution_date, '%Y-%m-%d').date()
     data = DictReader(open(file_path), fieldnames=fields, delimiter=delimiter, quoting=QUOTE_ALL)
 
-    # Skip header row
+    print(current_execution_date)
     next(data)
+    # Skip header row
+    print(parser.parse((next(data)['last_update'])).date())
 
     file_iterator = StringIteratorIO(
         (
@@ -69,7 +74,7 @@ def file_to_iterable(file_path: str, fields: tuple, delimiter: str = ',') -> Str
                     )
                 )
             ) + '\n'
-            for row in data
+            for row in data if parser.parse(row['last_update']).date() == current_execution_date
         )
     )
 
