@@ -5,9 +5,10 @@ from typing import Iterator
 from psycopg2 import OperationalError, connect
 
 class Postgres:
-    def __init__(self, host="postgres", database="postgres", user="postgres", port=5432):
+    def __init__(self, host="postgres", database="postgres", port=5432):
         try:
             logging.info(f"Initiating connection to PostgreSQL ({host}:{port})")
+            user = os.environ['POSTGRES_USER']
             password = os.environ['POSTGRES_PASSWORD']
 
             self.connection = connect(

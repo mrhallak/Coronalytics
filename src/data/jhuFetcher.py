@@ -32,7 +32,7 @@ class JhuFetcher:
         fields = ("province","country","last_update","confirmed","deaths","recovered","latitude","longitude")
         file_path = f"/tmp/{current_execution_date}.csv"
 
-        data = file_to_iterable(file_path, fields)
+        data = file_to_iterable(file_path, fields, current_execution_date)
 
         with Postgres() as pg:
             pg.load_file(data, 'daily_reports')
