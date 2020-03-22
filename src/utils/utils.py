@@ -76,7 +76,7 @@ def file_to_iterable(file_path: str, fields: tuple, delimiter: str = ',') -> Str
     return file_iterator
 
 def clean_csv_value(value: Optional[Any]) -> str:
-    if value is None:
+    if value is None or value == '':
         return r'\N'
 
     return str(value).replace('\n', '\\n').replace(',', '')
