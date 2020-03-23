@@ -52,11 +52,9 @@ class StringIteratorIO(TextIOBase):
 def file_to_iterable(file_path: str, fields: tuple, current_execution_date: str, delimiter: str = ',') -> StringIO:
     current_execution_date = datetime.strptime(current_execution_date, '%Y-%m-%d').date()
     data = DictReader(open(file_path), fieldnames=fields, delimiter=delimiter, quoting=QUOTE_ALL)
-
-    print(current_execution_date)
-    next(data)
+    
     # Skip header row
-    print(parser.parse((next(data)['last_update'])).date())
+    next(data)
 
     file_iterator = StringIteratorIO(
         (
@@ -74,7 +72,7 @@ def file_to_iterable(file_path: str, fields: tuple, current_execution_date: str,
                     )
                 )
             ) + '\n'
-            for row in data if parser.parse(row['last_update']).date() == current_execution_date
+            for row in data
         )
     )
 

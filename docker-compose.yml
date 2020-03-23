@@ -10,25 +10,10 @@ services:
             - 8080:8080
         env_file: 
             - config/airflow.env
-            - config/gcp.env
             - config/postgres.env
         volumes: 
             - ./src/:/usr/local/airflow/dags
         command: webserver
-
-    jupyter:
-        restart: "always"
-        build:
-            context: .
-            dockerfile: services/jupyter/Dockerfile
-        ports:
-            - 8888:8888
-        volumes:
-            - ./src/:/home/jovyan/work/
-        env_file:
-            - config/jupyter.env
-            - config/gcp.env
-        entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
     portainer:
         restart: "always"
