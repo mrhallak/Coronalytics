@@ -6,6 +6,19 @@ from psycopg2 import OperationalError, connect
 
 class Postgres:
     def __init__(self, **kwargs):
+        """Constructor for the PostgreSQL
+        wrapper. If a dictionnary of arguments
+        is passed, then the connection to the 
+        database is based on the dictionnary else
+        it will use environment variables.
+
+        Arguments:
+            host {str} -- Ip/Host of the database instance
+            database {str} -- Database name
+            user {str} -- Username
+            password {str} -- Password for authentication
+            port {int} -- Port to connect to
+        """        
         try:
             host = os.environ['POSTGRES_HOST'] if 'host' not in kwargs else kwargs['host']
             database = os.environ['POSTGRES_DB'] if 'database' not in kwargs else kwargs['database']
