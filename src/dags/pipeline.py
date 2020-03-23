@@ -9,11 +9,10 @@ from airflow.operators.python_operator import PythonOperator
 
 # Other
 from data.jhuFetcher import JhuFetcher
-from utils.storage import Storage
 
 default_args = {
     'owner': 'airflow',
-    'start_date': airflow.utils.dates.days_ago(60),
+    'start_date': airflow.utils.dates.days_ago(1),
     'depends_on_past': False,
     'email': [''],
     'email_on_failure': False,

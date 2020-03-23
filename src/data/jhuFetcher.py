@@ -28,11 +28,12 @@ class JhuFetcher:
             logging.error(e)
 
     @staticmethod
-    def load_to_pg(current_execution_date: str):
+    def load_to_pg(current_execution_date: str, table_name: str = 'daily_reports'):
         fields = ("province","country","last_update","confirmed","deaths","recovered","latitude","longitude")
         file_path = f"/tmp/{current_execution_date}.csv"
 
         data = file_to_iterable(file_path, fields, current_execution_date)
 
         with Postgres() as pg:
-            pg.load_data(data, 'daily_reports')
+            pg.execute_query(f"TRUNCATE {table_name}")
+            pg.load_data(data, table_name)

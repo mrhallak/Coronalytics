@@ -76,7 +76,7 @@ class Postgres:
 
             cursor = self.connection.cursor()
             cursor.execute(query)
-            cursor.commit()
+            self.connection.commit()
             cursor.close()
 
             logging.info(f"Operation succeeded")
@@ -102,7 +102,7 @@ class Postgres:
             
             cursor = self.connection.cursor()
             cursor.copy_from(data, table_name, sep=seperator, size=buffer_size)
-            cursor.commit()
+            self.connection.commit()
             cursor.close()
 
             logging.info("Done importing data to PostgreSQL")
