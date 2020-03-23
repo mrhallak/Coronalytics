@@ -35,4 +35,4 @@ class JhuFetcher:
         data = file_to_iterable(file_path, fields, current_execution_date)
 
         with Postgres() as pg:
-            pg.load_file(data, 'daily_reports')
+            pg.load_data(data, 'daily_reports')
