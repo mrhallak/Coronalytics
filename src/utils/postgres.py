@@ -4,6 +4,7 @@ import os
 from typing import Iterator
 from psycopg2 import OperationalError, connect
 
+
 class Postgres:
     def __init__(self, **kwargs):
         """Constructor for the PostgreSQL
@@ -18,22 +19,36 @@ class Postgres:
             user {str} -- Username
             password {str} -- Password for authentication
             port {int} -- Port to connect to
-        """        
+        """
         try:
-            host = os.environ['POSTGRES_HOST'] if 'host' not in kwargs else kwargs['host']
-            database = os.environ['POSTGRES_DB'] if 'database' not in kwargs else kwargs['database']
-            user = os.environ['POSTGRES_USER'] if 'user' not in kwargs else kwargs['user']
-            password = os.environ['POSTGRES_PASSWORD'] if 'password' not in kwargs else kwargs['password']
-            port = os.environ['POSTGRES_PORT'] if 'port' not in kwargs else kwargs['port']
+            host = (
+                os.environ["POSTGRES_HOST"] if "host" not in kwargs else kwargs["host"]
+            )
+            
+            database = (
+                os.environ["POSTGRES_DB"]
+                if "database" not in kwargs
+                else kwargs["database"]
+            )
+
+            user = (
+                os.environ["POSTGRES_USER"] if "user" not in kwargs else kwargs["user"]
+            )
+
+            password = (
+                os.environ["POSTGRES_PASSWORD"]
+                if "password" not in kwargs
+                else kwargs["password"]
+            )
+
+            port = (
+                os.environ["POSTGRES_PORT"] if "port" not in kwargs else kwargs["port"]
+            )
 
             logging.info(f"Initiating connection to PostgreSQL ({host}:{port})")
 
             self.connection = connect(
-                database=database,
-                host=host,
-                port=port,
-                user=user,
-                password=password
+                database=database, host=host, port=port, user=user, password=password
             )
 
             self.connection.autocommit = False
@@ -51,7 +66,7 @@ class Postgres:
         
         Returns:
             object -- Postgres object
-        """        
+        """
         return self
 
     def __exit__(self, *args):
@@ -59,17 +74,17 @@ class Postgres:
         we are done using the object created.
         It will make sure to close the open
         connection made to the database.
-        """        
+        """
         logging.info("Closing connection to PostgreSQL")
         self.connection.close()
         logging.info("Closed connection to PostgreSQL")
-    
+
     def execute_query(self, query: str):
         """This function executes a query on PostgreSQL
         
         Arguments:
             query {str} -- Query to be executed
-        """        
+        """
         try:
             logging.info("Executing query")
             logging.info(f"{query}")
@@ -85,7 +100,13 @@ class Postgres:
             self.connection.rollback()
             logging.error(e)
 
-    def load_data(self, data: Iterator, table_name: str, seperator: str = ',', buffer_size: int = 65536):
+    def load_data(
+        self,
+        data: Iterator,
+        table_name: str,
+        seperator: str = ",",
+        buffer_size: int = 65536,
+    ):
         """This function loads data from an
         iterator to PostgreSQL.
         
@@ -96,10 +117,10 @@ class Postgres:
         Keyword Arguments:
             seperator {str} -- Delimiter that seperates the data (default: {','})
             buffer_size {int} -- Size of the chunks (default: {65536})
-        """        
+        """
         try:
             logging.info("Importing data to PostgreSQL")
-            
+
             cursor = self.connection.cursor()
             cursor.copy_from(data, table_name, sep=seperator, size=buffer_size)
             self.connection.commit()
