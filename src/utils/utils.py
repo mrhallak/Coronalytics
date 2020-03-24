@@ -9,7 +9,7 @@ from typing import Optional, Any, Iterator
 class StringIteratorIO(TextIOBase):
     def __init__(self, iter: Iterator[str]):
         self._iter = iter
-        self._buff = ''
+        self._buff = ""
 
     def readable(self) -> bool:
         return True
@@ -20,9 +20,9 @@ class StringIteratorIO(TextIOBase):
                 self._buff = next(self._iter)
             except StopIteration:
                 break
-        
+
         ret = self._buff[:n]
-        self._buff = self._buff[len(ret):]
+        self._buff = self._buff[len(ret) :]
         return ret
 
     def read(self, n: Optional[int] = None) -> str:
@@ -45,14 +45,22 @@ class StringIteratorIO(TextIOBase):
 
                 n -= len(m)
                 line.append(m)
-    
-        return ''.join(line)
+
+        return "".join(line)
 
 
-def file_to_iterable(file_path: str, fields: tuple, current_execution_date: str, delimiter: str = ',') -> StringIO:
-    current_execution_date = datetime.strptime(current_execution_date, '%Y-%m-%d').date()
-    data = DictReader(open(file_path), fieldnames=fields, delimiter=delimiter, quoting=QUOTE_ALL)
+def file_to_iterable(
+    file_path: str, fields: tuple, current_execution_date: str, delimiter: str = ","
+) -> StringIO:
+
+    current_execution_date = datetime.strptime(
+        current_execution_date, "%Y-%m-%d"
+    ).date()
     
+    data = DictReader(
+        open(file_path), fieldnames=fields, delimiter=delimiter, quoting=QUOTE_ALL
+    )
+
     # Skip header row
     next(data)
 
@@ -60,26 +68,29 @@ def file_to_iterable(file_path: str, fields: tuple, current_execution_date: str,
         (
             delimiter.join(
                 map(
-                    clean_csv_value, (
-                        row['province'],
-                        row['country'],
-                        row['last_update'],
-                        row['confirmed'],
-                        row['deaths'],
-                        row['recovered'],
-                        row['latitude'],
-                        row['longitude'],
-                    )
+                    clean_csv_value,
+                    (
+                        row["province"],
+                        row["country"],
+                        row["last_update"],
+                        row["confirmed"],
+                        row["deaths"],
+                        row["recovered"],
+                        row["latitude"],
+                        row["longitude"],
+                    ),
                 )
-            ) + '\n'
+            )
+            + "\n"
             for row in data
         )
     )
 
     return file_iterator
 
-def clean_csv_value(value: Optional[Any]) -> str:
-    if value is None or value == '':
-        return r'\N'
 
-    return str(value).replace('\n', '\\n').replace(',', '')
+def clean_csv_value(value: Optional[Any]) -> str:
+    if value is None or value == "":
+        return r"\N"
+
+    return str(value).replace("\n", "\\n").replace(",", "")
