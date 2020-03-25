@@ -1,55 +1,34 @@
 import requests
 import logging
+import json
 
+from typing import List, Dict
 from datetime import datetime
-from utils.postgres import Postgres
-from utils.utils import file_to_iterable
 
 
 class JhuFetcher:
     @staticmethod
-    def fetch(current_execution_date: str, chunk_size=8192, **context: dict) -> None:
+    def fetch_by_country() -> List[Dict]:
         try:
-            execution_date_reformat = datetime.strptime(
-                current_execution_date, "%Y-%m-%d"
-            ).strftime("%m-%d-%Y")
+            url = f"https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/2/query?f=json&where=Confirmed%20%3E%200&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc&resultOffset=0&resultRecordCount=200&cacheHint=true"
 
-            logging.info(
-                f"Fetching data from Johns Hopkins University - Daily Reports ({current_execution_date})"
-            )
+            response = requests.get(url)
+            data = response.json()
 
-            url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{execution_date_reformat}.csv"
-
-            write_path = f"/tmp/{current_execution_date}.csv"
-
-            with requests.get(url, stream=True) as r:
-                r.raise_for_status()
-
-                with open(write_path, "wb") as f:
-                    for chunk in r.iter_content(chunk_size=chunk_size):
-                        if chunk:
-                            f.write(chunk)
+            return data['fields']
 
         except Exception as e:
             logging.error(e)
 
     @staticmethod
-    def load_to_pg(current_execution_date: str, table_name: str = "daily_reports") -> None:
-        fields = (
-            "province",
-            "country",
-            "last_update",
-            "confirmed",
-            "deaths",
-            "recovered",
-            "latitude",
-            "longitude",
-        )
+    def fetch_by_province() -> List[Dict]:
+        try:
+            url = f"https://services9.arcgis.com/N9p5hsImWXAccRNI/arcgis/rest/services/Nc2JKvYFoAEOFCG5JSI6/FeatureServer/3/query?f=json&where=Confirmed%3C%3E0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc&resultOffset=0&resultRecordCount=75&cacheHint=true"
 
-        file_path = f"/tmp/{current_execution_date}.csv"
+            response = requests.get(url)
+            data = response.json()
 
-        data = file_to_iterable(file_path, fields, current_execution_date)
+            return data['fields']
 
-        with Postgres() as pg:
-            pg.execute_query(f"TRUNCATE {table_name}")
-            pg.load_data(data, table_name)
+        except Exception as e:
+            logging.error(e)
