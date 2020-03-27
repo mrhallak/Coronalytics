@@ -3,7 +3,7 @@ import logging
 import json
 
 from typing import List, Dict
-from datetime import datetime
+from utils.elastic import Elastic
 
 
 class JhuFetcher:
@@ -21,7 +21,7 @@ class JhuFetcher:
                 body = entry['attributes']
 
                 documents.append({
-                    "fetch_update": datetime.now(),
+                    "fetch_update": kwargs['current_execution_date'],
                     "confirmed": body['Confirmed'],
                     "deaths": body['Deaths'],
                     "recovered": body['Recovered'],
@@ -38,16 +38,11 @@ class JhuFetcher:
 
         except Exception as e:
             logging.error(e)
+    @staticmethod
+    def load_data(**kwargs):
+        ti = kwargs['task_instance']
 
-    # @staticmethod
-    # def fetch_by_province() -> List[Dict]:
-    #     try:
-    #         url = f"https://services9.arcgis.com/N9p5hsImWXAccRNI/arcgis/rest/services/Nc2JKvYFoAEOFCG5JSI6/FeatureServer/3/query?f=json&where=Confirmed%3C%3E0&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc&resultOffset=0&resultRecordCount=75&cacheHint=true"
+        data = ti.xcom_pull(task_ids='fetch_data')
 
-    #         response = requests.get(url)
-    #         data = response.json()
-
-    #         return data['fields']
-
-    #     except Exception as e:
-    #         logging.error(e)
+        with Elastic() as ecs:
+            ecs.index(kwargs['index_name'], data, chunk_size=10000)

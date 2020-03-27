@@ -30,22 +30,17 @@ dag = DAG(
 
 fetch_data = PythonOperator(
     task_id="fetch_data",
-    python_callable=JhuFetcher.fetch,
+    python_callable=JhuFetcher.fetch_by_country,
     provide_context=True,
     op_kwargs={"current_execution_date": "{{ ds }}"},
     dag=dag,
 )
 
-# load_data_in_pg = PythonOperator(
-#     task_id="load_data",
-#     python_callable=JhuFetcher.load_to_pg,
-#     op_kwargs={"current_execution_date": "{{ ds }}"},
-#     dag=dag,
-# )
+load_data_ecs = PythonOperator(
+    task_id="load_data",
+    python_callable=JhuFetcher.load_data,
+    op_kwargs={"current_execution_date": "{{ ds }}"},
+    dag=dag,
+)
 
-# delete_local_file = BashOperator(
-#     task_id="delete_temp_file", bash_command="rm -rf /tmp/{{ ds }}.csv", dag=dag,
-# )
-
-# fetch_data >> [load_data_in_pg]
-# load_data_in_pg >> [delete_local_file]
+fetch_data >> [load_data_ecs]
