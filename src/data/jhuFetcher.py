@@ -1,55 +1,51 @@
 import requests
 import logging
+import json
 
-from datetime import datetime
-from utils.postgres import Postgres
-from utils.utils import file_to_iterable
-
+from typing import List, Dict
+from utils.elastic import Elastic
 
 class JhuFetcher:
     @staticmethod
-    def fetch(current_execution_date: str, chunk_size=8192, **context: dict) -> None:
+    def fetch_by_country(**kwargs) -> List[Dict]:
         try:
-            execution_date_reformat = datetime.strptime(
-                current_execution_date, "%Y-%m-%d"
-            ).strftime("%m-%d-%Y")
+            logging.info("Fetching data by country from JHU")
+            url = f"https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/2/query?f=json&where=Confirmed%20%3E%200&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc&resultOffset=0&resultRecordCount=200&cacheHint=true"
 
-            logging.info(
-                f"Fetching data from Johns Hopkins University - Daily Reports ({current_execution_date})"
-            )
+            response = requests.get(url)
+            logging.info("Retrieved the data by country from JHU")
 
-            url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{execution_date_reformat}.csv"
+            data = response.json()['features']
 
-            write_path = f"/tmp/{current_execution_date}.csv"
+            documents = []
 
-            with requests.get(url, stream=True) as r:
-                r.raise_for_status()
+            for entry in data:
+                body = entry['attributes']
 
-                with open(write_path, "wb") as f:
-                    for chunk in r.iter_content(chunk_size=chunk_size):
-                        if chunk:
-                            f.write(chunk)
+                documents.append({
+                    "updated": kwargs['current_execution_date'],
+                    "confirmed": body['Confirmed'],
+                    "deaths": body['Deaths'],
+                    "recovered": body['Recovered'],
+                    "geoip": {
+                        "location": {
+                            "lon": body['Long_'],
+                            "lat": body['Lat']
+                        },
+                        "country_name": body['Country_Region'],
+                    }
+                })
+
+            return documents
 
         except Exception as e:
             logging.error(e)
-
+    
     @staticmethod
-    def load_to_pg(current_execution_date: str, table_name: str = "daily_reports") -> None:
-        fields = (
-            "province",
-            "country",
-            "last_update",
-            "confirmed",
-            "deaths",
-            "recovered",
-            "latitude",
-            "longitude",
-        )
+    def load_data(**kwargs):
+        ti = kwargs['task_instance']
 
-        file_path = f"/tmp/{current_execution_date}.csv"
+        data = ti.xcom_pull(task_ids='fetch_data_by_country')
 
-        data = file_to_iterable(file_path, fields, current_execution_date)
-
-        with Postgres() as pg:
-            pg.execute_query(f"TRUNCATE {table_name}")
-            pg.load_data(data, table_name)
+        with Elastic() as ecs:
+            ecs.index(kwargs['index_name'], data, chunk_size=10000)
