@@ -13,6 +13,8 @@ services:
         volumes: 
             - ./src/:/usr/local/airflow/dags
         command: webserver
+        networks:
+            - elastic
 
     portainer:
         restart: "always"
@@ -35,6 +37,7 @@ services:
             - config/elasticsearch.env
         ports:
             - 9200:9200
+            - 9300:9300
         networks:
             - elastic
     
@@ -45,6 +48,8 @@ services:
             dockerfile: services/kibana/Dockerfile
         ports:
             - 5601:5601
+        env_file:
+            - config/kibana.env
         networks:
             - elastic
 

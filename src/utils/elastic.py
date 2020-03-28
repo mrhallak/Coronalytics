@@ -5,7 +5,14 @@ from elasticsearch import Elasticsearch, helpers
 class Elastic:
     def __init__(self, **kwargs):
         try:
-            self.elastic_client = Elasticsearch()
+            hosts = [
+                f"http://elastic:changeme@elasticsearch:9200"
+            ]
+
+            self.elastic_client = Elasticsearch(hosts)
+
+            if not self.elastic_client.ping():
+                raise ValueError("Connection failed")
 
         except Exception as e:
             logging.error(e)

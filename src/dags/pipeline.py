@@ -28,19 +28,20 @@ dag = DAG(
     schedule_interval=datetime.timedelta(days=1),
 )
 
-fetch_data = PythonOperator(
-    task_id="fetch_data",
+fetch_data_by_country = PythonOperator(
+    task_id="fetch_data_by_country",
     python_callable=JhuFetcher.fetch_by_country,
     provide_context=True,
     op_kwargs={"current_execution_date": "{{ ds }}"},
     dag=dag,
 )
 
-load_data_ecs = PythonOperator(
-    task_id="load_data",
+load_data_by_country = PythonOperator(
+    task_id="load_data_by_country",
     python_callable=JhuFetcher.load_data,
-    op_kwargs={"current_execution_date": "{{ ds }}"},
+    op_kwargs={"index_name": "by_country"},
+    provide_context=True,
     dag=dag,
 )
 
-fetch_data >> [load_data_ecs]
+fetch_data_by_country >> [load_data_by_country]
