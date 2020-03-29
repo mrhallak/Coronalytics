@@ -1,9 +1,7 @@
 # Data
 
 ## Data Source
-The data fetched is from Johns Hopkins University's (JHU) [COVID-19 github repository][1].
+The data is fetched from the JHU's COVID-19 [dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) API.
 
 ## Data persistence
-TBD.
-
-[1]: https://github.com/CSSEGISandData/COVID-19
+The data is persisted in an index called by_country on ElasticSearch. Each country is a document inside that index.

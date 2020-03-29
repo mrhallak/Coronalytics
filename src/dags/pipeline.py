@@ -9,6 +9,11 @@ from airflow.operators.python_operator import PythonOperator
 
 # Other
 from data.jhuFetcher import JhuFetcher
+from utils.elastic import Elastic
+
+mapping = {"mappings": {"properties": {"location": {"type": "geo_point"}}}}
+
+index_name = "by_country"
 
 default_args = {
     "owner": "airflow",
@@ -28,6 +33,13 @@ dag = DAG(
     schedule_interval=datetime.timedelta(days=1),
 )
 
+create_index = PythonOperator(
+    task_id="create_index",
+    python_callable=Elastic().create_index,
+    op_kwargs={"index_name": index_name, "mapping": mapping},
+    dag=dag,
+)
+
 fetch_data_by_country = PythonOperator(
     task_id="fetch_data_by_country",
     python_callable=JhuFetcher.fetch_by_country,
@@ -39,9 +51,9 @@ fetch_data_by_country = PythonOperator(
 load_data_by_country = PythonOperator(
     task_id="load_data_by_country",
     python_callable=JhuFetcher.load_data,
-    op_kwargs={"index_name": "by_country"},
+    op_kwargs={"index_name": index_name, "pull_from": "fetch_data_by_country"},
     provide_context=True,
     dag=dag,
 )
 
-fetch_data_by_country >> [load_data_by_country]
+create_index >> fetch_data_by_country >> load_data_by_country

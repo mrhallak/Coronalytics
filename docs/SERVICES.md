@@ -21,5 +21,3 @@ Portainer allows you to build and manage your docker containers.
 | Portainer | 9090 |
 | ElasticSearch | 9200 |
 | Kibana | 5601 |
-
-[1]: https://cloud.google.com/composer/docs/how-to/managing/connections#creating_new_airflow_connections
