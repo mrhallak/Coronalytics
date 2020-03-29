@@ -1,9 +1,7 @@
 # Data
 
 ## Data Source
-The data fetched is from Johns Hopkins University's (JHU) [COVID-19 github repository][1].
-
-## Data persistence
 TBD.
 
-[1]: https://github.com/CSSEGISandData/COVID-19
+## Data persistence
+The data is persisted in an index called by_country on ElasticSearch. Each country is a document inside that index.
