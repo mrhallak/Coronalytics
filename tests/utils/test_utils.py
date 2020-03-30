@@ -29,7 +29,16 @@ RESPONSE_TEMPLATE = {
     "country_name": "Switzerland",
 }
 
-def test_generate_document():
+def test_generate_document_output():
     generated_doc = generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
 
     assert generated_doc == RESPONSE_TEMPLATE
+
+def test_generate_document_output_type():
+    generated_doc = generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
+
+    assert type(generated_doc) == dict
+
+def test_generate_document_errors():
+    with pytest.raises(TypeError):
+        generate_document("", CURRENT_EXECUTION_DATE)

@@ -8,16 +8,22 @@ def generate_document(body: dict, current_execution_date: str) -> dict:
         body {dict} -- JSON object received
         current_execution_date {str} -- DAG's execution date
     
+    Raises:
+        TypeError: The passed object is not of type dict
+
     Returns:
         dict -- Transformed object
-    """    
-    doc = {
-        "updated": current_execution_date,
-        "confirmed": body["Confirmed"],
-        "deaths": body["Deaths"],
-        "recovered": body["Recovered"],
-        "location": {"lon": body["Long_"], "lat": body["Lat"]},
-        "country_name": body["Country_Region"],
-    }
+    """
+    if isinstance(body, dict):
+        doc = {
+            "updated": current_execution_date,
+            "confirmed": body["Confirmed"],
+            "deaths": body["Deaths"],
+            "recovered": body["Recovered"],
+            "location": {"lon": body["Long_"], "lat": body["Lat"]},
+            "country_name": body["Country_Region"],
+        }
 
-    return doc
+        return doc
+    else:
+        raise TypeError("Please pass a dictionary")
