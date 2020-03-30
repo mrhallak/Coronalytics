@@ -1,6 +1,5 @@
 import requests
 import logging
-import json
 
 from typing import List, Dict
 from utils.elastic import Elastic
