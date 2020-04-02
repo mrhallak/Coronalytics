@@ -1,15 +1,13 @@
 import datetime
-import os
 
 # Airflow
 import airflow
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 
 # Other
-from data.jhuFetcher import JhuFetcher
-from utils.elastic import Elastic
+from src.data.jhuFetcher import JhuFetcher
+from src.utils.elastic import Elastic
 
 mapping = {"mappings": {"properties": {"location": {"type": "geo_point"}}}}
 

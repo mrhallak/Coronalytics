@@ -1,10 +1,9 @@
 import requests
 import logging
-import json
 
 from typing import List, Dict
-from utils.elastic import Elastic
-from utils.utils import generate_document
+from src.utils.elastic import Elastic
+from src.utils.utils import generate_document
 
 
 class JhuFetcher:
