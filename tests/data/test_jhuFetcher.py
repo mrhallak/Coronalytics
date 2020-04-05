@@ -7,7 +7,7 @@ CURRENT_EXECUTION_DATE = datetime.now()
 
 
 @pytest.fixture()
-def request():
+def data():
     return JhuFetcher.fetch_by_country(current_execution_date=CURRENT_EXECUTION_DATE)
 
 
