@@ -14,7 +14,7 @@ class Elastic:
         
         Raises:
             ValueError: Unable to connect to the ElasticSearch cluster
-        """        
+        """
         try:
             username = (
                 kwargs["username"]
@@ -74,7 +74,7 @@ class Elastic:
         Arguments:
             index_name {str} -- Name of the index to be created
             mapping {dict} -- Dict mapping keys to the type of their values
-        """        
+        """
         self.elastic_client.indices.create(index=index_name, body=mapping, ignore=[400])
 
     def index(self, index_name: str, data: Iterator, chunk_size: int = 100000):
@@ -87,7 +87,7 @@ class Elastic:
         
         Keyword Arguments:
             chunk_size {int} -- Size of the chunks to stream (default: {100000})
-        """           
+        """
         failed = 0
         total = 0
 

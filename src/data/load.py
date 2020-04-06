@@ -7,7 +7,7 @@ class Loader:
         """This function grabs
         data from the XCom and loads it
         into the ES cluster in chunks
-        """        
+        """
         ti = kwargs["task_instance"]
 
         data = ti.xcom_pull(task_ids=kwargs["pull_from"])

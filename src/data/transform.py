@@ -10,7 +10,12 @@ class Transformer:
 
         data = ti.xcom_pull(task_ids=kwargs["pull_from"])
 
-        documents = map(lambda e: self.generate_document(e["attributes"], kwargs["current_execution_date"]), data['features'])
+        documents = map(
+            lambda e: self.generate_document(
+                e["attributes"], kwargs["current_execution_date"]
+            ),
+            data["features"],
+        )
 
         return documents
 

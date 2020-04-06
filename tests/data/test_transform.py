@@ -8,15 +8,15 @@ CURRENT_EXECUTION_DATE = datetime.now()
 
 
 DOCUMENT_TEMPLATE = {
-    "OBJECTID": 16, 
+    "OBJECTID": 16,
     "Country_Region": "Switzerland",
-    "Last_Update": 1585506823000, 
+    "Last_Update": 1585506823000,
     "Lat": 46.8182,
-    "Long_": 8.2275, 
+    "Long_": 8.2275,
     "Confirmed": 14829,
-    "Deaths": 300, 
-    "Recovered": 1595, 
-    "Active": 12934
+    "Deaths": 300,
+    "Recovered": 1595,
+    "Active": 12934,
 }
 
 RESPONSE_TEMPLATE = {
@@ -24,10 +24,7 @@ RESPONSE_TEMPLATE = {
     "confirmed": 14829,
     "deaths": 300,
     "recovered": 1595,
-    "location": {
-        "lon": 8.2275,
-        "lat": 46.8182
-    },
+    "location": {"lon": 8.2275, "lat": 46.8182},
     "country_name": "Switzerland",
 }
 
@@ -38,12 +35,16 @@ class TestTransformer:
         return Transformer()
 
     def test_generate_document_output(self, transformer):
-        generated_doc = transformer.generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
+        generated_doc = transformer.generate_document(
+            DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
+        )
 
         assert generated_doc == RESPONSE_TEMPLATE
 
     def test_generate_document_output_type(self, transformer):
-        generated_doc = transformer.generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
+        generated_doc = transformer.generate_document(
+            DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
+        )
 
         assert type(generated_doc) == dict
 

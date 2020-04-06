@@ -5,7 +5,6 @@ from datetime import datetime
 from src.data.fetch import JhuFetcher
 
 
-
 @pytest.fixture()
 def response():
     return JhuFetcher.fetch_by_country()
@@ -19,7 +18,7 @@ class TestJhuFetcher:
         assert response.status_code == 200
 
     def test_fetch_by_country_response_type(self, response):
-        data = response.json()['features']
+        data = response.json()["features"]
 
         assert type(data) == list
         assert type(data[0]) == dict

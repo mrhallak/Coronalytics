@@ -1,8 +1,8 @@
 import requests
 import logging
 
-
 from typing import List, Dict
+
 
 class JhuFetcher:
     @staticmethod
@@ -13,7 +13,7 @@ class JhuFetcher:
         
         Returns:
             List[Dict] -- Each dict contains the stats of a country
-        """        
+        """
         try:
             logging.info("Fetching data by country from JHU")
             url = f"https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/2/query?f=json&where=Confirmed%20%3E%200&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc&resultOffset=0&resultRecordCount=200&cacheHint=true"
