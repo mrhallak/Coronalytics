@@ -51,3 +51,4 @@ class TestTransformer:
     def test_generate_document_errors(self, transformer):
         with pytest.raises(TypeError):
             transformer.generate_document("", CURRENT_EXECUTION_DATE)
+            transformer.generate_document(DOCUMENT_TEMPLATE, None)
