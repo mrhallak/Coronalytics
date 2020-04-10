@@ -6,7 +6,9 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 
 # Other
-from src.data.jhuFetcher import JhuFetcher
+from src.data.fetch import JhuFetcher
+from src.data.load import Loader
+from src.data.transform import Transformer
 from src.service.elastic import Elastic
 
 mapping = {"mappings": {"properties": {"location": {"type": "geo_point"}}}}
@@ -41,17 +43,27 @@ create_index = PythonOperator(
 fetch_data_by_country = PythonOperator(
     task_id="fetch_data_by_country",
     python_callable=JhuFetcher.fetch_by_country,
+    dag=dag,
+)
+
+transform_data_by_country = PythonOperator(
+    task_id="transform_data_by_country",
+    python_callable=Transformer().transform_by_country,
+    op_kwargs={
+        "index_name": index_name,
+        "pull_from": "fetch_data_by_country",
+        "current_execution_date": "{{ ds }}"
+    },
     provide_context=True,
-    op_kwargs={"current_execution_date": "{{ ds }}"},
     dag=dag,
 )
 
 load_data_by_country = PythonOperator(
     task_id="load_data_by_country",
-    python_callable=JhuFetcher.load_data,
-    op_kwargs={"index_name": index_name, "pull_from": "fetch_data_by_country"},
+    python_callable=Loader.load_data,
+    op_kwargs={"index_name": index_name, "pull_from": "transform_data_by_country"},
     provide_context=True,
     dag=dag,
 )
 
-create_index >> fetch_data_by_country >> load_data_by_country
+create_index >> fetch_data_by_country >> transform_data_by_country >> load_data_by_country

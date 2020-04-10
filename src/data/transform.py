@@ -13,11 +13,13 @@ class Transformer:
 
         data = ti.xcom_pull(task_ids=kwargs["pull_from"])
 
-        documents = map(
-            lambda e: self.generate_document(
-                e["attributes"], kwargs["current_execution_date"]
-            ),
-            data["features"],
+        documents = list(
+            map(
+                lambda e: self.generate_document(
+                    e["attributes"], kwargs["current_execution_date"]
+                ),
+                data
+            )
         )
 
         return documents
@@ -38,9 +40,14 @@ class Transformer:
                 "confirmed": body["Confirmed"],
                 "deaths": body["Deaths"],
                 "recovered": body["Recovered"],
-                "location": {"lon": body["Long_"], "lat": body["Lat"]},
                 "country_name": body["Country_Region"],
             }
+
+            if body["Long_"] or body["Lat"]:
+                doc["location"] = {
+                    "lon": body["Long_"],
+                    "lat": body["Lat"]
+                }
 
             return doc
         else:
