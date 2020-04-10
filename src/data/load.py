@@ -1,4 +1,4 @@
-from src.utils.elastic import Elastic
+from src.service.elastic import Elastic
 
 
 class Loader:

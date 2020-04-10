@@ -7,7 +7,7 @@ from airflow.operators.python_operator import PythonOperator
 
 # Other
 from src.data.jhuFetcher import JhuFetcher
-from src.utils.elastic import Elastic
+from src.service.elastic import Elastic
 
 mapping = {"mappings": {"properties": {"location": {"type": "geo_point"}}}}
 
