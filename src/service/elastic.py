@@ -1,5 +1,4 @@
 import logging
-import datetime
 import os
 
 from elasticsearch import Elasticsearch, helpers
@@ -11,10 +10,9 @@ class Elastic:
         """Constructor, creates an
         elasticsearch client and checks if
         we are able to connect to the cluster.
-        
-        Raises:
-            ValueError: Unable to connect to the ElasticSearch cluster
-        """        
+
+        :param kwargs:
+        """
         try:
             username = (
                 kwargs["username"]
@@ -46,13 +44,12 @@ class Elastic:
 
     def __enter__(self) -> object:
         """This function allows us to use
-        context management in python. This 
+        context management in python. This
         function will be executed when the
         object is created with the "with"
         keyword.
-        
-        Returns:
-            object -- Elastic object
+
+        :return: Elastic object
         """
         return self
 
@@ -61,6 +58,8 @@ class Elastic:
         we are done using the object created.
         It will make sure to close the open
         connection made to the database.
+
+        :param args:
         """
         logging.info("Closing connection to ElasticSearch")
         self.elastic_client.transport.close()
@@ -74,20 +73,18 @@ class Elastic:
         Arguments:
             index_name {str} -- Name of the index to be created
             mapping {dict} -- Dict mapping keys to the type of their values
-        """        
+        """
         self.elastic_client.indices.create(index=index_name, body=mapping, ignore=[400])
 
     def index(self, index_name: str, data: Iterator, chunk_size: int = 100000):
         """This function streams to the cluster in bulk the data
         contained in an iterator.
-        
-        Arguments:
-            index_name {str} -- Index to store the documents in
-            data {Iterator} -- Documents iterator
-        
-        Keyword Arguments:
-            chunk_size {int} -- Size of the chunks to stream (default: {100000})
-        """           
+
+        :param index_name: Name of the index to store the documents in
+        :param data: Documents iterator
+        :param chunk_size: Size of the chunks to stream (default: {100000})
+        :return:
+        """
         failed = 0
         total = 0
 
