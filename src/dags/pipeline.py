@@ -27,7 +27,7 @@ default_args = {
 }
 
 dag = DAG(
-    "data_pipeline",
+    dag_id="data_pipeline",
     default_args=default_args,
     description="DAG to extract, transform and load data related to the Corona virus (COVID-19)",
     schedule_interval=datetime.timedelta(days=1),
