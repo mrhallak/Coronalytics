@@ -18,7 +18,7 @@ class Transformer:
                 lambda e: self.generate_document(
                     e["attributes"], kwargs["current_execution_date"]
                 ),
-                data
+                data,
             )
         )
 
@@ -44,10 +44,7 @@ class Transformer:
             }
 
             if body["Long_"] or body["Lat"]:
-                doc["location"] = {
-                    "lon": body["Long_"],
-                    "lat": body["Lat"]
-                }
+                doc["location"] = {"lon": body["Long_"], "lat": body["Lat"]}
 
             return doc
         else:

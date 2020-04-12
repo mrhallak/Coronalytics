@@ -2,7 +2,12 @@ import pytest
 
 from airflow.models import DagBag
 
-TASK_IDS = ['create_index', 'fetch_data_by_country', 'transform_data_by_country', 'load_data_by_country']
+TASK_IDS = [
+    "create_index",
+    "fetch_data_by_country",
+    "transform_data_by_country",
+    "load_data_by_country",
+]
 
 
 @pytest.fixture()
@@ -19,6 +24,7 @@ class TestDAGDefinition:
         1. Total number of tasks in the DAG
         2. upstream and downstream dependencies of each task
     """
+
     def test_dag_has_tasks(self, dag):
         """
         This function checks if the DAG
@@ -34,12 +40,7 @@ class TestDAGDefinition:
         :param dag: Graph to test
         """
         dag_tasks = dag.tasks
-        dag_task_ids = list(
-            map(
-                lambda task: task.task_id
-                , dag_tasks
-            )
-        )
+        dag_task_ids = list(map(lambda task: task.task_id, dag_tasks))
 
         assert dag_task_ids == TASK_IDS
 
@@ -50,25 +51,19 @@ class TestDAGDefinition:
         dependencies.
         :param dag: Graph to test
         """
-        create_index = dag.get_task('create_index')
+        create_index = dag.get_task("create_index")
 
         upstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                create_index.upstream_list
-            )
+            map(lambda task: task.task_id, create_index.upstream_list)
         )
 
         assert upstream_task_ids == []
 
         downstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                create_index.downstream_list
-            )
+            map(lambda task: task.task_id, create_index.downstream_list)
         )
 
-        assert downstream_task_ids == ['fetch_data_by_country']
+        assert downstream_task_ids == ["fetch_data_by_country"]
 
     def test_dependencies_of_fetch_data_by_country(self, dag):
         """
@@ -77,25 +72,19 @@ class TestDAGDefinition:
         dependencies.
         :param dag: Graph to test
         """
-        fetch_data_by_country = dag.get_task('fetch_data_by_country')
+        fetch_data_by_country = dag.get_task("fetch_data_by_country")
 
         upstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.upstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.upstream_list)
         )
 
-        assert upstream_task_ids == ['create_index']
+        assert upstream_task_ids == ["create_index"]
 
         downstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.downstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.downstream_list)
         )
 
-        assert downstream_task_ids == ['transform_data_by_country']
+        assert downstream_task_ids == ["transform_data_by_country"]
 
     def test_dependencies_of_transform_data_by_country(self, dag):
         """
@@ -104,25 +93,19 @@ class TestDAGDefinition:
         dependencies.
         :param dag: Graph to test
         """
-        fetch_data_by_country = dag.get_task('transform_data_by_country')
+        fetch_data_by_country = dag.get_task("transform_data_by_country")
 
         upstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.upstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.upstream_list)
         )
 
-        assert upstream_task_ids == ['fetch_data_by_country']
+        assert upstream_task_ids == ["fetch_data_by_country"]
 
         downstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.downstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.downstream_list)
         )
 
-        assert downstream_task_ids == ['load_data_by_country']
+        assert downstream_task_ids == ["load_data_by_country"]
 
     def test_dependencies_of_load_data_by_country(self, dag):
         """
@@ -131,22 +114,16 @@ class TestDAGDefinition:
         dependencies.
         :param dag: Graph to test
         """
-        fetch_data_by_country = dag.get_task('load_data_by_country')
+        fetch_data_by_country = dag.get_task("load_data_by_country")
 
         upstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.upstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.upstream_list)
         )
 
-        assert upstream_task_ids == ['transform_data_by_country']
+        assert upstream_task_ids == ["transform_data_by_country"]
 
         downstream_task_ids = list(
-            map(
-                lambda task: task.task_id,
-                fetch_data_by_country.downstream_list
-            )
+            map(lambda task: task.task_id, fetch_data_by_country.downstream_list)
         )
 
         assert downstream_task_ids == []

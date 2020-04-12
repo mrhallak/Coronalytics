@@ -52,7 +52,7 @@ transform_data_by_country = PythonOperator(
     op_kwargs={
         "index_name": index_name,
         "pull_from": "fetch_data_by_country",
-        "current_execution_date": "{{ ds }}"
+        "current_execution_date": "{{ ds }}",
     },
     provide_context=True,
     dag=dag,
