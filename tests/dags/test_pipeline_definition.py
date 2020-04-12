@@ -1,21 +1,9 @@
-import pytest
-
-from airflow.models import DagBag
-
 TASK_IDS = [
     "create_index",
     "fetch_data_by_country",
     "transform_data_by_country",
     "load_data_by_country",
 ]
-
-
-@pytest.fixture()
-def dag():
-    dagbag = DagBag(dag_folder="./src/dags", include_examples=False)
-    dag = dagbag.get_dag(dag_id="data_pipeline")
-
-    return dag
 
 
 class TestDAGDefinition:
