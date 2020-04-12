@@ -23,14 +23,14 @@ default_args = {
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
-    "retry_delay": datetime.timedelta(minutes=5),
+    "retry_delay": datetime.timedelta(minutes=15),
 }
 
 dag = DAG(
     dag_id="data_pipeline",
     default_args=default_args,
     description="DAG to extract, transform and load data related to the Corona virus (COVID-19)",
-    schedule_interval=datetime.timedelta(days=1),
+    schedule_interval=datetime.timedelta(hours=12),
 )
 
 create_index = PythonOperator(
@@ -52,7 +52,7 @@ transform_data_by_country = PythonOperator(
     op_kwargs={
         "index_name": index_name,
         "pull_from": "fetch_data_by_country",
-        "current_execution_date": "{{ ds }}",
+        "current_execution_date": "{{ ts }}",
     },
     provide_context=True,
     dag=dag,
