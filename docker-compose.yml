@@ -3,6 +3,9 @@ version: '3'
 services:
     airflow:
         restart: "always"
+        depends_on:
+          - postgres
+          - elasticsearch
         build:
             context: .
             dockerfile: services/airflow/Dockerfile
@@ -13,8 +16,6 @@ services:
         volumes: 
             - .:/usr/local/airflow/dags
         command: webserver
-        networks:
-            - elastic
 
     portainer:
         restart: "always"
@@ -38,8 +39,6 @@ services:
         ports:
             - 9200:9200
             - 9300:9300
-        networks:
-            - elastic
     
     kibana:
         restart: "always"
@@ -50,11 +49,15 @@ services:
             - 5601:5601
         env_file:
             - config/kibana.env
-        networks:
-            - elastic
 
-networks:
-    elastic:
+    postgres:
+        restart: "always"
+        image: postgres
+        ports:
+            - 5432:5432
+        env_file:
+          - config/postgres.env
 
 volumes:
+    postgres_volume:
     portainer_volume:
