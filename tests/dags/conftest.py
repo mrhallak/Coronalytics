@@ -2,6 +2,7 @@ import pytest
 from airflow.models import DagBag
 
 DAG_FOLDER = './src/dags'
+DAG_ID = 'data_pipeline'
 
 
 @pytest.fixture(scope="module")
@@ -11,6 +12,6 @@ def dagbag():
 
 @pytest.fixture(scope="module")
 def dag(dagbag):
-    dag = dagbag.get_dag(dag_id='data_pipeline')
+    dag = dagbag.get_dag(dag_id=DAG_ID)
 
     return dag
