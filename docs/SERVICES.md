@@ -14,6 +14,9 @@ Airflow is an orchestration tool that allows us to run a DAG (Direct Acyclic Gra
 ### Portainer
 Portainer allows you to build and manage your docker containers.
 
+### Postgres
+Postgres will allow Airflow to store metadata about our DAGs.
+
 ## Service-port mapping
 | Service | Port |
 | --- | --- |
@@ -21,3 +24,4 @@ Portainer allows you to build and manage your docker containers.
 | Portainer | 9090 |
 | ElasticSearch | 9200 |
 | Kibana | 5601 |
+| Postgres | 5432 |
