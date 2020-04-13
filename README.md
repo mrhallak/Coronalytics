@@ -10,6 +10,12 @@ This project consists of a data pipeline that fetches data, stores it in Elastic
 ## The pipeline
 TBD.
 
+## My Learning Outcomes
+* Introduction to Airflow
+* Introduction to testing (pytest, mocking, etc...)
+* Indexing using ElasticSearch
+* Visualization with Kibana
+
 ## Documentation
 - [Changelog](docs/CHANGELOG.md)
 - [Data](docs/DATA.md)
