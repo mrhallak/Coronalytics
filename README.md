@@ -8,7 +8,7 @@
 This project consists of a data pipeline that fetches data, stores it in ElasticSearch and visualizes it in Kibana.
 
 ## The pipeline
-TBD.
+![alt text](docs/images/Pipeline.png "Pipeline")
 
 ## My Learning Outcomes
 * Introduction to Airflow
