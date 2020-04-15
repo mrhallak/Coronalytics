@@ -11,7 +11,12 @@ class Elastic:
         elasticsearch client and checks if
         we are able to connect to the cluster.
 
-        :param kwargs:
+        Args:
+            **kwargs: Optional args to connect to your ES cluster
+                ELASTICSEARCH_USERNAME: Username
+                ELASTICSEARCH_PASSWORD: Password
+                ELASTICSEARCH_HOST: Host
+                ELASTICSEARCH_PORT: Port
         """
         try:
             username = (
@@ -49,7 +54,7 @@ class Elastic:
         object is created with the "with"
         keyword.
 
-        :return: Elastic object
+        Returns: Elastic object
         """
         return self
 
@@ -59,7 +64,8 @@ class Elastic:
         It will make sure to close the open
         connection made to the database.
 
-        :param args:
+        Args:
+            *args: Args passed to constructor
         """
         logging.info("Closing connection to ElasticSearch")
         self.elastic_client.transport.close()
@@ -69,10 +75,10 @@ class Elastic:
         """This function creates an index on
         the ElasticSearch cluster and ignores any
         errors if the index already exists.
-        
-        Arguments:
-            index_name {str} -- Name of the index to be created
-            mapping {dict} -- Dict mapping keys to the type of their values
+
+        Args:
+            index_name: Name of the index to be created
+            mapping: Dict mapping keys to the type of their values
         """
         self.elastic_client.indices.create(index=index_name, body=mapping, ignore=[400])
 
@@ -80,10 +86,10 @@ class Elastic:
         """This function streams to the cluster in bulk the data
         contained in an iterator.
 
-        :param index_name: Name of the index to store the documents in
-        :param data: Documents iterator
-        :param chunk_size: Size of the chunks to stream (default: {100000})
-        :return:
+        Args:
+            index_name: Name of the index to store the documents in
+            data: Documents iterator
+            chunk_size: Size of the chunks to stream (default: {100000})
         """
         failed = 0
         total = 0

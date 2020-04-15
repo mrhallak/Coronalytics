@@ -4,10 +4,14 @@ from datetime import datetime
 
 class Transformer:
     def transform_by_country(self, **kwargs) -> Iterator[Dict]:
-        """
+        """Calls on the generate_document function
+        to trasnform the dicts in the Iterable
 
-        :param kwargs:
-        :return: Iterator containg dicts (each dict is a document)
+        Args:
+            **kwargs: should contain the task instance from the Airflow DAG, current_execution_date and the task id to pull the iterator from the XCOM
+
+        Returns:
+            Iterator containg dicts (each dict is a document)
         """
         ti = kwargs["task_instance"]
 
@@ -30,9 +34,12 @@ class Transformer:
         document that we will store in
         ElasticSearch.
 
-        :param body: JSON object received
-        :param current_execution_date: DAG's execution date
-        :return: Transformed object
+        Args:
+            body: JSON object received
+            current_execution_date: current_execution_date: DAG's execution date
+
+        Returns:
+            Transformed dict
         """
         if isinstance(body, dict):
             doc = {

@@ -35,6 +35,12 @@ class TestTransformer:
         return Transformer()
 
     def test_generate_document_output(self, transformer):
+        """Test that generate_document returns the
+        expected output.
+
+        Args:
+            transformer: Transformer object
+        """
         generated_doc = transformer.generate_document(
             DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
         )
@@ -42,6 +48,12 @@ class TestTransformer:
         assert generated_doc == RESPONSE_TEMPLATE
 
     def test_generate_document_output_type(self, transformer):
+        """Test that generate_document returns a
+        dictionnary.
+
+        Args:
+            transformer: Transformer object
+        """
         generated_doc = transformer.generate_document(
             DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
         )
@@ -49,6 +61,12 @@ class TestTransformer:
         assert type(generated_doc) == dict
 
     def test_generate_document_errors(self, transformer):
+        """Test if generate_document throws an error if the
+        passed parameters are not of the expected types.
+
+        Args:
+            transformer: Transformer object
+        """
         with pytest.raises(TypeError):
             transformer.generate_document("", CURRENT_EXECUTION_DATE)
             transformer.generate_document(DOCUMENT_TEMPLATE, None)
