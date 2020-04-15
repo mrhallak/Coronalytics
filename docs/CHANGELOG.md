@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ## [2.0.1] - In progress
 ### Added
-- Sphinx style documentation
+- Google style documentation
+- [Black code formatting](https://github.com/psf/black)
 - Add tests using pytest and pytest-cov
 - Used [codecov.io](http://www.codecov.io/) to showcase the testcase coverage
 - Bug fixes
