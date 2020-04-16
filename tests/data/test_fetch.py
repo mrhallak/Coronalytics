@@ -7,9 +7,14 @@ from unittest.mock import patch, MagicMock
 
 class TestJhuFetcher:
     @patch("src.data.fetch.requests")
-    def test_fetch_by_country_api_error(self, mock_requests):
+    def test_fetch_by_country_api_error(self, mock_request):
+        """Test whether the raise_for_status raises an error.
+        
+        Args:
+            mock_request: Mock request
+        """
         mock_response = MagicMock()
-        mock_requests.get.return_value = mock_response
+        mock_request.get.return_value = mock_response
         mock_response.json.return_value = {"error": "Too many requests."}
 
         with pytest.raises(JhuApiError):
@@ -17,25 +22,41 @@ class TestJhuFetcher:
             mock_response.raise_for_status.assert_called()
 
     @patch("src.data.fetch.requests")
-    def test_fetch_by_country_json_error(self, mock_requests):
+    def test_fetch_by_country_json_error(self, mock_request):
+        """Test whether response.json() throws an error.
+
+        Args:
+            mock_request: Mock request
+        """
         mock_response = MagicMock()
-        mock_requests.get.return_value = mock_response
+        mock_request.get.return_value = mock_response
         mock_response.json.side_effect = ValueError
 
         with pytest.raises(ValueError):
             country_stats = JhuFetcher.fetch_by_country()
 
     @patch("src.data.fetch.requests")
-    def test_fetch_by_country_request_error(self, mock_requests):
+    def test_fetch_by_country_request_error(self, mock_request):
+        """Test whether the request will throw an error.
+
+        Args:
+            mock_request: Mock request
+        """
         mock_response = MagicMock()
-        mock_requests.get.return_value = mock_response
+        mock_request.get.return_value = mock_response
         mock_response.json.side_effect = HTTPError
 
         with pytest.raises(HTTPError):
             country_stats = JhuFetcher.fetch_by_country()
 
     @patch("src.data.fetch.requests")
-    def test_fetch_by_country_succeeds(self, mock_requests):
+    def test_fetch_by_country_succeeds(self, mock_request):
+        """Test for a happy path where the request succeeds
+        and the expected output is valid.
+
+        Args:
+            mock_request: Mock request
+        """
         expected = [
             {
                 "attributes": {
@@ -66,7 +87,7 @@ class TestJhuFetcher:
         ]
 
         mock_response = MagicMock()
-        mock_requests.get.return_value = mock_response
+        mock_request.get.return_value = mock_response
         mock_response.json.return_value = {"features": expected}
 
         country_stats = JhuFetcher.fetch_by_country()

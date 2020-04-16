@@ -1,8 +1,8 @@
 import pytest
 from airflow.models import DagBag
 
-DAG_FOLDER = './src/dags'
-DAG_ID = 'data_pipeline'
+DAG_FOLDER = "./src/dags"
+DAG_ID = "data_pipeline"
 
 
 @pytest.fixture(scope="module")
