@@ -18,6 +18,13 @@ This project consists of a data pipeline that fetches data, stores it in Elastic
 
 ## Documentation
 - [Changelog](docs/CHANGELOG.md)
-- [Data](docs/DATA.md)
-- [Installation](docs/INSTALL.md)
+- [Installation & Usage](docs/INSTALL.md)
 - [Services](docs/SERVICES.md)
+- [Data](docs/DATA.md)
+
+## Authors
+* [Mohamad Hallak](http://hallak.io)
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
