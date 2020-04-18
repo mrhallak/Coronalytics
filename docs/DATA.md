@@ -5,3 +5,6 @@ The data is fetched from the JHU's COVID-19 [dashboard](https://www.arcgis.com/a
 
 ## Data persistence
 The data is persisted in an index called by_country on ElasticSearch. Each country is a document inside that index.
+
+## Visualization
+In order to visualize the data with Kibana, you need to setup your index patterns in the settings page.
