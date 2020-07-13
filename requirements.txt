@@ -1,4 +1,4 @@
-apache-airflow[gcp]==1.10.10
+apache-airflow[gcp]==1.10.11
 elasticsearch==7.8.0
 pytest==5.4.3
 codecov==2.1.7
