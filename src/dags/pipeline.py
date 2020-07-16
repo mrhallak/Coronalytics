@@ -41,9 +41,7 @@ create_index = PythonOperator(
 )
 
 fetch_data_by_country = PythonOperator(
-    task_id="fetch_data_by_country",
-    python_callable=JhuFetcher.fetch_by_country,
-    dag=dag,
+    task_id="fetch_data_by_country", python_callable=JhuFetcher.fetch_by_country, dag=dag,
 )
 
 transform_data_by_country = PythonOperator(

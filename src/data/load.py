@@ -25,6 +25,4 @@ class Loader:
 
             log_level = logging.DEBUG if not failed else logging.WARNING
 
-            logging.log(
-                log_level, f"Indexing outcome - Total: {total} - Failed {failed}"
-            )
+            logging.log(log_level, f"Indexing outcome - Total: {total} - Failed {failed}")
