@@ -19,9 +19,7 @@ class Transformer:
 
         documents = list(
             map(
-                lambda e: self.generate_document(
-                    e["attributes"], kwargs["current_execution_date"]
-                ),
+                lambda e: self.generate_document(e["attributes"], kwargs["current_execution_date"]),
                 data,
             )
         )

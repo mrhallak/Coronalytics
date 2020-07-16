@@ -20,21 +20,13 @@ class Elastic:
         """
         try:
             username = (
-                kwargs["username"]
-                if "username" in kwargs
-                else os.environ["ELASTICSEARCH_USERNAME"]
+                kwargs["username"] if "username" in kwargs else os.environ["ELASTICSEARCH_USERNAME"]
             )
             password = (
-                kwargs["password"]
-                if "password" in kwargs
-                else os.environ["ELASTICSEARCH_PASSWORD"]
+                kwargs["password"] if "password" in kwargs else os.environ["ELASTICSEARCH_PASSWORD"]
             )
-            host = (
-                kwargs["host"] if "host" in kwargs else os.environ["ELASTICSEARCH_HOST"]
-            )
-            port = (
-                kwargs["port"] if "port" in kwargs else os.environ["ELASTICSEARCH_PORT"]
-            )
+            host = kwargs["host"] if "host" in kwargs else os.environ["ELASTICSEARCH_HOST"]
+            port = kwargs["port"] if "port" in kwargs else os.environ["ELASTICSEARCH_PORT"]
 
             hosts = [f"http://{username}:{password}@{host}:{port}"]
 

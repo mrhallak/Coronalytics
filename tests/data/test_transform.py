@@ -41,9 +41,7 @@ class TestTransformer:
         Args:
             transformer: Transformer object
         """
-        generated_doc = transformer.generate_document(
-            DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
-        )
+        generated_doc = transformer.generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
 
         assert generated_doc == RESPONSE_TEMPLATE
 
@@ -54,9 +52,7 @@ class TestTransformer:
         Args:
             transformer: Transformer object
         """
-        generated_doc = transformer.generate_document(
-            DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE
-        )
+        generated_doc = transformer.generate_document(DOCUMENT_TEMPLATE, CURRENT_EXECUTION_DATE)
 
         assert type(generated_doc) == dict
 

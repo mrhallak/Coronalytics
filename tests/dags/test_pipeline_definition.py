@@ -41,15 +41,11 @@ class TestDAGDefinition:
         """
         create_index = dag.get_task("create_index")
 
-        upstream_task_ids = list(
-            map(lambda task: task.task_id, create_index.upstream_list)
-        )
+        upstream_task_ids = list(map(lambda task: task.task_id, create_index.upstream_list))
 
         assert upstream_task_ids == []
 
-        downstream_task_ids = list(
-            map(lambda task: task.task_id, create_index.downstream_list)
-        )
+        downstream_task_ids = list(map(lambda task: task.task_id, create_index.downstream_list))
 
         assert downstream_task_ids == ["fetch_data_by_country"]
 
