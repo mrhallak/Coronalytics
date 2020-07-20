@@ -3,26 +3,23 @@ name: Code quality check
 on:
   pull_request:
     branches:
-    - master
-    - staging
+      - master
+      - staging
 
 jobs:
   black:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Python 3.7
-      uses: actions/setup-python@master
-      with:
-        python-version: 3.7
+      - name: Set up Python 3.7
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.7
 
-    - name: Install black
-      run: |
-        pip install black
+      - name: Install black
+        run: |
+          pip install black
 
-    - name: Check Formatting with black
-      run: |
-          # Unfortunately I could not find a good way of only checking the files in the current PR
-          # git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '^.*\.py$' | xargs black --check
+      - name: Check Formatting with black
+        run: |
           black --check .
-
