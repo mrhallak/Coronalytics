@@ -1,20 +1,22 @@
-version: '3'
+version: "3"
 
 services:
     airflow:
         container_name: coronalytics_airflow
         restart: "always"
         depends_on:
-          - postgres
-          - elasticsearch
+            - postgres
+            - elasticsearch
         build:
             context: .
             dockerfile: services/airflow/Dockerfile
         ports:
             - 8080:8080
-        env_file: 
+        env_file:
             - config/airflow.env
-        volumes: 
+            - config/elasticsearch.env
+            - config/postgres.env
+        volumes:
             - .:/usr/local/airflow/dags
         command: webserver
 
@@ -42,9 +44,11 @@ services:
         ports:
             - 9200:9200
             - 9300:9300
-    
+
     kibana:
         container_name: coronalytics_kibana
+        depends_on:
+            - elasticsearch
         restart: "always"
         build:
             context: .
@@ -52,7 +56,7 @@ services:
         ports:
             - 5601:5601
         env_file:
-            - config/kibana.env
+            - config/elasticsearch.env
 
     postgres:
         container_name: coronalytics_postgres
@@ -61,7 +65,7 @@ services:
         ports:
             - 5432:5432
         env_file:
-          - config/postgres.env
+            - config/postgres.env
 
 volumes:
     postgres_volume:
