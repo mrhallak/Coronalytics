@@ -23,7 +23,7 @@ class Elastic:
                 kwargs["username"] if "username" in kwargs else os.environ["ELASTICSEARCH_USERNAME"]
             )
             password = (
-                kwargs["password"] if "password" in kwargs else os.environ["ELASTICSEARCH_PASSWORD"]
+                kwargs["password"] if "password" in kwargs else os.environ["ELASTIC_PASSWORD"]
             )
             host = kwargs["host"] if "host" in kwargs else os.environ["ELASTICSEARCH_HOST"]
             port = kwargs["port"] if "port" in kwargs else os.environ["ELASTICSEARCH_PORT"]
