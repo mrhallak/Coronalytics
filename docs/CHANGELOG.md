@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Refactor .env files
 - Changed how the connection is made to the metadata DB
 - Changed postgres versions
+- Changed the LICENSE
 - Changed Airflow Executors
 - Add Airflow health checks
 ##  [[2.0.1]](https://github.com/mrhallak/Coronalytics/releases/tag/v2.0.1) - 2020-04-18
