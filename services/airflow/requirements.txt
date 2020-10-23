@@ -1,6 +1,6 @@
 pytest-cov==2.10.1
-codecov==2.1.9
-pytest==6.0.1
+codecov==2.1.10
+pytest==6.1.1
 elasticsearch==7.9.1
 apache-airflow[gcp]==1.10.12
 pre-commit==2.7.1
