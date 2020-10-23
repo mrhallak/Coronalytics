@@ -8,7 +8,6 @@ HEALTH_URL = "http://127.0.0.1:8080/health"
 
 try:
     response = requests.get(HEALTH_URL).json()
-    logging.info(response)
 except:
     logger.error(f"Encountered an Error when making the request to the localhost")
     sys.exit(1)
