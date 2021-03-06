@@ -1,4 +1,4 @@
-name: Code quality check
+name: Code Quality Check
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Set up Python 3.7
-        uses: actions/setup-python@master
+        uses: actions/setup-python@v2
         with:
           python-version: 3.7
 
