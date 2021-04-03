@@ -1,0 +1,79 @@
+version: "3"
+
+x-airflow-common:
+    &airflow-common
+    env_file:
+        - config/airflow.env
+        - config/elasticsearch.env
+        - config/postgres.env
+    volumes:
+        - .:/opt/airflow/dags
+        - ./logs:/opt/airflow/logs
+    restart: always
+    build: ./services/airflow/
+    depends_on:
+        postgres:
+            condition: service_healthy
+
+services:
+    webserver:
+        <<: *airflow-common
+        container_name: coronalytics_airflow_webserver
+        ports:
+            - 8080:8080
+        command: webserver
+        healthcheck:
+            test: ["CMD", "python", "./health_check.py"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+            start_period: 120s
+    
+    scheduler:
+        <<: *airflow-common
+        container_name: coronalytics_airflow_scheduler
+        command: scheduler
+        healthcheck:
+            test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    elasticsearch:
+        container_name: coronalytics_elasticsearch
+        restart: always
+        build: ./services/elasticsearch
+        env_file:
+            - config/elasticsearch.env
+        ports:
+            - 9200:9200
+            - 9300:9300
+
+    kibana:
+        container_name: coronalytics_kibana
+        depends_on:
+            - elasticsearch
+        restart: always
+        build: ./services/kibana
+        ports:
+            - 5601:5601
+        env_file:
+            - config/elasticsearch.env
+
+    postgres:
+        container_name: coronalytics_postgres
+        restart: "always"
+        build: ./services/postgres
+        ports:
+            - 5432:5432
+        env_file:
+            - config/postgres.env
+        volumes:
+            - ./data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "airflow"]
+            interval: 5s
+            retries: 5
+
+volumes:
+    postgres_volume:

@@ -2,5 +2,5 @@ pytest-cov==2.10.1
 codecov==2.1.10
 pytest==6.1.1
 elasticsearch==7.9.1
-apache-airflow==1.10.14
+apache-airflow==2.0.1 --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.0.1/constraints-3.7.txt"
 pre-commit==2.7.1

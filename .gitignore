@@ -133,3 +133,5 @@ gcp-service-account.json
 
 .vscode/
 .idea/
+data/
+logs/
