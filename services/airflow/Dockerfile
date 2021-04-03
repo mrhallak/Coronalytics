@@ -1,9 +1,7 @@
-FROM puckel/docker-airflow
-
-USER root
+FROM apache/airflow:2.0.1-python3.7
 
 # Install requirements
-ADD ./requirements.txt .
+COPY ./requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy script for health check
