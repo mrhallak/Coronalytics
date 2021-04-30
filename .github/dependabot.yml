@@ -33,10 +33,6 @@ updates:
   - mrhallak
   assignees:
   - mrhallak
-  ignore:
-  - dependency-name: elasticsearch
-    versions:
-    - 7.11.1
 - package-ecosystem: docker
   directory: "/services/kibana"
   schedule:
@@ -47,10 +43,6 @@ updates:
   - mrhallak
   assignees:
   - mrhallak
-  ignore:
-  - dependency-name: kibana
-    versions:
-    - 7.11.1
 - package-ecosystem: docker
   directory: "/services/postgres"
   schedule:
