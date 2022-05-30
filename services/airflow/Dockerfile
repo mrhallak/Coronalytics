@@ -1,4 +1,4 @@
-FROM apache/airflow:2.2.5-python3.7
+FROM apache/airflow:2.3.1-python3.7
 
 # Install requirements
 COPY ./requirements.txt ./requirements.txt
